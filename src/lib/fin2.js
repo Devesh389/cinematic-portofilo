@@ -8,7 +8,7 @@ if (sec) {
   const vid = document.getElementById('finVid');
   const nv = document.getElementById('finVidN');
   const nvv = document.getElementById('finVidNv');
-  let i = 0, timer = 0, inView = false;
+  let i = 0, timer = 0, inView = false, near = false;
   const ready = (el) => { const im = el.querySelector('img'); return !im || (im.complete && im.naturalWidth > 0); };
   const list = () => {
     const vok = vid && vid.dataset.ok === '1';
@@ -33,7 +33,7 @@ if (sec) {
     }
   };
   const cv = document.getElementById('finCarVid');
-  const carSync = () => { if (cv && cv.paused) cv.play().catch(() => {}); };
+  const carSync = () => { if (near && cv && cv.getAttribute('src') && cv.paused) cv.play().catch(() => {}); };
   const dur = (el) => {
     const v = el && (el.id === 'finVidL' ? vid : el.id === 'finVidN' ? nvv : null);
     return v && v.duration > 0 && isFinite(v.duration) ? Math.min(12000, Math.round(v.duration * 1000) + 400) : (v ? 8400 : 5000);
@@ -59,8 +59,8 @@ if (sec) {
     // phone that cannot decode it never shows a black beat
     vid.addEventListener('playing', () => { if (vid.dataset.ok !== '1') { vid.dataset.ok = '1'; const on = all.find((el) => el.classList.contains('is-on')); if (!on || on.id === 'finStage1') { i = 0; show(0); } } if (!list().includes(document.getElementById('finVidL')) ) return; });
     const warm = () => { if (vid.src) return; vid.src = vid.dataset.src; vid.load(); vid.play().catch(() => {}); };
-    setTimeout(warm, 800);
-    mq.addEventListener('change', warm);
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) warm(); }, { rootMargin: '900px 0px' }).observe(sec);
+    mq.addEventListener('change', () => { if (near) warm(); });
   }
   if (cv) {
     // the car clip is part of the page itself and keeps playing; any touch or
@@ -68,13 +68,13 @@ if (sec) {
     cv.addEventListener('playing', () => { cv.dataset.ok = '1'; cv.classList.add('is-ok'); });
     cv.addEventListener('error', () => { cv.style.display = 'none'; });
     ['touchend', 'pointerup', 'click', 'keydown'].forEach((n) => addEventListener(n, carSync, { passive: true }));
-    cv.play().catch(() => {});
+    new IntersectionObserver(([e]) => { near = e.isIntersecting; if (near) { if (!cv.getAttribute('src')) { cv.src = cv.dataset.src; cv.load(); } carSync(); } else cv.pause(); }, { rootMargin: '900px 0px' }).observe(sec);
     setInterval(carSync, 1500);
   }
   if (nvv) {
     nvv.addEventListener('playing', () => { if (nv.dataset.ok !== '1') { nv.dataset.ok = '1'; if (!nv.classList.contains('is-on')) nvv.pause(); } });
-    setTimeout(() => { if (nvv.src || !mq.matches) return; nvv.src = nvv.dataset.src; nvv.load(); nvv.play().catch(() => {}); }, 1200);
-    mq.addEventListener('change', () => { if (mq.matches && !nvv.src) { nvv.src = nvv.dataset.src; nvv.load(); nvv.play().catch(() => {}); } });
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting || nvv.getAttribute('src') || !mq.matches) return; nvv.src = nvv.dataset.src; nvv.load(); nvv.play().catch(() => {}); }, { rootMargin: '900px 0px' }).observe(sec);
+    mq.addEventListener('change', () => { if (near && mq.matches && !nvv.getAttribute('src')) { nvv.src = nvv.dataset.src; nvv.load(); nvv.play().catch(() => {}); } });
   }
   [vid, nvv].forEach((v) => v && v.addEventListener('ended', () => { const L = list(); if (curEl && v.parentNode === curEl && L[L.length - 1] === curEl) markDone(); }));
   window.__finCount = () => list().length;
