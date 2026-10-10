@@ -11,6 +11,9 @@ const top = (id) => {
   const el = document.getElementById(id);
   return el ? Math.round(el.getBoundingClientRect().top + window.scrollY) : null;
 };
+const hero = document.getElementById("holoVid");
+let heroStarted = 0;
+hero?.addEventListener("playing", () => { if (!heroStarted) heroStarted = performance.now(); });
 const dwell = (id) => {
   if (id === 'holo') return 10000;
   if (id === 'hero') return 6500;
@@ -57,7 +60,7 @@ const stop = () => {
 ['wheel', 'touchmove', 'keydown'].forEach((n) => addEventListener(n, stop, { passive: true }));
 
 const restart = () => {
-  endSince = 0; snap(false);
+  endSince = 0; heroStarted = 0; snap(false);
   try { wipe.animate([{ transform: 'translateX(-100%)' }, { transform: 'translateX(100%)' }], { duration: GLIDE, easing: 'cubic-bezier(.4,0,.2,1)' }); } catch {}
   setY(0); idx = 0; arrived = performance.now(); pausedUntil = 0; window.__finDone = false;
   setTimeout(() => snap(true), 300);
@@ -76,5 +79,11 @@ setInterval(() => {
   if (atEnd) { if (!endSince) endSince = now; } else endSince = 0;
   if (atEnd && endSince && now - endSince >= 30000) { restart(); return; }
   if (idx >= ids.length - 1) return;
+  if (ids[idx] === "holo" && hero) {
+    // Count the opening beat from actual playback, not from an empty poster.
+    // Keep a timeout so a failed download cannot trap the visitor here.
+    if (!hero.ended && (!heroStarted || now - heroStarted < 10000) && now - arrived < 30000) return;
+    glide(idx + 1); return;
+  }
   if (now - arrived >= dwell(ids[idx])) glide(idx + 1);
 }, 250);
