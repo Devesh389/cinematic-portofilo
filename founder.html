@@ -144,8 +144,8 @@ var cards=Array.from(document.querySelectorAll('#ventures .card'));
 var secs=[0,document.getElementById('ventures'),...cards,document.querySelector('.about').parentNode,document.querySelector('footer')];
 var pos=function(k){var e=secs[k];if(!e)return 0;if(typeof e==='number')return e;var inset=e.matches('.card')?90:(e.tagName==='FOOTER'?0:20);return Math.max(0,Math.min(e.getBoundingClientRect().top+scrollY-inset,document.documentElement.scrollHeight-innerHeight))};
 var timer=0,k=0,live=false;
-// Read each venture for 8 seconds after its glide completes.
-function plan(i,w){clearTimeout(timer);timer=setTimeout(function(){if(i>=secs.length-1)return;var next=i+1,travel=2600;cards.forEach(function(c){c.classList.toggle('is-reading',c===secs[next])});glide(pos(next),travel);var hold=secs[next]&&secs[next].matches&&secs[next].matches('.card')?8000:8500;plan(next,travel+hold)},w)}
+// Read each venture for 4 seconds after its glide completes.
+function plan(i,w){clearTimeout(timer);timer=setTimeout(function(){if(i>=secs.length-1)return;var next=i+1,travel=2600;cards.forEach(function(c){c.classList.toggle('is-reading',c===secs[next])});glide(pos(next),travel);var hold=secs[next]&&secs[next].matches&&secs[next].matches('.card')?4000:8500;plan(next,travel+hold)},w)}
 ['wheel','touchstart','keydown','pointerdown'].forEach(function(n){addEventListener(n,function(){cancelAnimationFrame(anim);clearTimeout(timer);timer=setTimeout(function(){var b=0,d=1e9;secs.forEach(function(_,j){var x=Math.abs(pos(j)-scrollY);if(x<d){d=x;b=j}});plan(b,6000)},14000)},{passive:true})});
 plan(0,10000);
 })();
