@@ -71,10 +71,10 @@ setInterval(() => {
   if (!started) { started = now; arrived = now; idx = near(); }
   if (gliding || now < pausedUntil) return;
   if (!arrived) { idx = near(); arrived = now; }
-  // end of the page: after 5 s start the whole experience again from scene 1
+  // end of the page: after 30 s start the whole experience again from scene 1
   const atEnd = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight) < 8;
   if (atEnd) { if (!endSince) endSince = now; } else endSince = 0;
-  if (atEnd && endSince && now - endSince >= 5000) { restart(); return; }
+  if (atEnd && endSince && now - endSince >= 30000) { restart(); return; }
   if (idx >= ids.length - 1) return;
   if (now - arrived >= dwell(ids[idx])) glide(idx + 1);
 }, 250);
