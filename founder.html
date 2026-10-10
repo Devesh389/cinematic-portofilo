@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script>if(innerWidth>=900&&innerWidth>innerHeight&&!new URLSearchParams(location.search).has("portrait")){location.replace("desktop.html?view=founder")}</script>
+<script>if((innerWidth>700||innerWidth>innerHeight)&&!new URLSearchParams(location.search).has("portrait")){location.replace("desktop.html?view=founder")}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Devesh Sarkaar — Founder | Propvance IT Solutions · Gharleads · AI-vesh Academy</title>
 <meta name="description" content="Devesh Sarkaar, founder of Propvance IT Solutions Private Limited, Gharleads and AI-vesh Academy.">
@@ -84,7 +84,7 @@ footer a{color:var(--cy)}
     </div>
   </div>
   <!-- Swapped hero. Walking trial retained: public/media/1-founder-trial-smooth.mp4 and public/media/2-founder-trial-poster.jpg. Original Founder hologram also retained: public/media/16-holo.mp4. -->
-  <div class="holo"><video id="holoVid" data-swapped="1" data-trial="1" preload="auto" data-src="public/media/8-holohero.mp4" poster="public/media/9-holohero.jpg" autoplay muted playsinline></video></div>
+  <div class="holo"><video disableRemotePlayback id="holoVid" data-swapped="1" data-trial="1" preload="auto" data-src="public/media/8-holohero.mp4" poster="public/media/9-holohero.jpg" autoplay muted playsinline></video></div>
 </header>
 
 <div class="stats">
