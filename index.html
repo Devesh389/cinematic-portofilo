@@ -11,6 +11,7 @@
 <link rel="preload" href="public/fonts/oswald-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="public/fonts/oswald-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="src/styles/app.css">
+<style>@media(min-aspect-ratio:1/1){.holo video[data-trial]{object-position:50% 0%}}</style>
 <link rel="stylesheet" href="src/styles/universe.css?v=2">
 <link rel="stylesheet" href="src/styles/chrono.css">
 <link rel="stylesheet" href="src/styles/projects.css">
@@ -112,9 +113,9 @@
 
 <main class="flow">
   <!-- ==================================================================== -->
-  <!-- Opening: the hologram film, with his own voice. The walking scene follows. -->
-  <section class="holo" id="holo" aria-label="Devesh Sarkaar, hologram introduction">
-    <video id="holoVid" muted loop playsinline autoplay preload="auto" poster="public/media/9-holohero.jpg" src="public/media/8-holohero.mp4" aria-hidden="true"></video>
+  <!-- Swapped trial hero. Revert: public/media/8-holohero.mp4 and public/media/9-holohero.jpg. -->
+  <section class="holo" id="holo" aria-label="Devesh Sarkaar, introduction">
+    <video id="holoVid" data-trial="1" muted playsinline autoplay preload="auto" poster="public/media/2-founder-trial-poster.jpg" data-src="public/media/1-founder-trial-smooth.mp4" aria-hidden="true"></video>
     <div class="holo__cap" aria-hidden="true">
       <b>Devesh Sarkaar</b>
       <span>Developer · Founder · Storyteller</span>
@@ -226,11 +227,11 @@
 </section>
 
 <script type="module" src="src/lib/orient.js?v=1"></script>
-<script type="module" src="src/main.js?v=5"></script>
+<script type="module" src="src/main.js?v=6"></script>
 <script type="module" src="src/lib/sound.js?v=11"></script>
 <script type="module" src="src/lib/fin2.js?v=97"></script>
-<script type="module" src="src/lib/holo.js?v=4"></script>
+<script type="module" src="src/lib/holo.js?v=5"></script>
 <script type="module" src="src/lib/tlvid.js?v=5"></script>
-<script type="module" src="src/lib/auto.js?v=5"></script>
+<script type="module" src="src/lib/auto.js?v=6"></script>
 </body>
 </html>
