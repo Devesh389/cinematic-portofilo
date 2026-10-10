@@ -7,7 +7,16 @@ const GLIDE = 1900;
 const top = (id) => {
   if (id === 'holo') return 0;
   if (id === 'hero') { const sp = document.querySelector('.hero-spacer'); return sp ? Math.round(sp.getBoundingClientRect().top + window.scrollY) : null; }
-  if (id === 'end') return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  if (id === 'end') {
+    // Rest on the useful footer group, not the blank padding below it.
+    const card = document.querySelector('#contact .cv');
+    const footer = document.querySelector('#contact .contact__c');
+    const max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    if (!card || !footer) return max;
+    const first = card.getBoundingClientRect().top + scrollY - 16;
+    const last = footer.getBoundingClientRect().bottom + scrollY - innerHeight + 40;
+    return Math.min(max, Math.max(0, first, last));
+  }
   const el = document.getElementById(id);
   return el ? Math.round(el.getBoundingClientRect().top + window.scrollY) : null;
 };
@@ -48,7 +57,7 @@ const glide = (k) => {
     const p = Math.min(1, (n - t0) / GLIDE);
     setY(from + (t - from) * ease(p));
     if (p < 1) anim = requestAnimationFrame(f);
-    else { gliding = false; idx = k; arrived = performance.now(); snap(true); }
+    else { gliding = false; idx = k; arrived = performance.now(); snap(ids[k] !== 'end'); }
   };
   anim = requestAnimationFrame(f);
 };
@@ -75,7 +84,7 @@ setInterval(() => {
   if (gliding || now < pausedUntil) return;
   if (!arrived) { idx = near(); arrived = now; }
   // end of the page: after 30 s start the whole experience again from scene 1
-  const atEnd = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight) < 8;
+  const atEnd = Math.abs(window.scrollY - top('end')) < 8;
   if (atEnd) { if (!endSince) endSince = now; } else endSince = 0;
   if (atEnd && endSince && now - endSince >= 30000) { restart(); return; }
   if (idx >= ids.length - 1) return;
