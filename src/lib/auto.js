@@ -91,7 +91,7 @@ setInterval(() => {
   if (ids[idx] === "holo" && hero) {
     // Count the opening beat from actual playback, not from an empty poster.
     // Keep a timeout so a failed download cannot trap the visitor here.
-    if (!hero.ended && (!heroStarted || now - heroStarted < 10000) && now - arrived < 90000) return;
+    if (!hero.ended && (!heroStarted || now - heroStarted < 10000) && now - arrived < (Number(hero.dataset.startTimeout) || 90000)) return;
     glide(idx + 1); return;
   }
   if (now - arrived >= dwell(ids[idx])) glide(idx + 1);
