@@ -22,7 +22,9 @@ export async function initUniverse() {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const state = { visible: false, raf: 0, entered: false };
 
+  const warm = () => { if (!film.getAttribute('src')) { film.src = film.dataset.src; film.preload = 'auto'; film.load(); } };
   const play = () => {
+    warm();
     film.play().catch(() => {
       // autoplay refused: arm a one-shot retry on the first real interaction
       const retry = () => { film.play().catch(() => {}); };
@@ -84,14 +86,11 @@ export async function initUniverse() {
   film.addEventListener('error', () => section.classList.add('is-fallback'),
     { once: true });
 
-  // warm the film once the page is otherwise idle, so scrolling into the
-  // section never waits on a 3 MB fetch
-  window.addEventListener('load', () => {
-    if (!state.entered && film.preload !== 'auto') {
-      film.preload = 'auto';
-      film.load();
-    }
-  }, { once: true });
+  // Give the opening video first use of the connection, then prepare scene 2.
+  const hero = document.getElementById('holoVid');
+  const prepare = () => setTimeout(warm, 3500);
+  if (hero && hero.readyState < 3) hero.addEventListener('canplay', prepare, { once: true });
+  else prepare();
 
   return { film, section };
 }
