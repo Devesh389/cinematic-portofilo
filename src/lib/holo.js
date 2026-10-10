@@ -4,7 +4,7 @@ const sec = document.getElementById('holo');
 const v = document.getElementById('holoVid');
 if (sec && v) {
   const mobile = matchMedia("(max-width:700px) and (max-aspect-ratio:1/1)").matches;
-  const source = mobile && v.dataset.mobileSrc ? v.dataset.mobileSrc : v.dataset.src;
+  const source = mobile && matchMedia("(pointer:coarse)").matches && v.dataset.mobileSrc ? v.dataset.mobileSrc : v.dataset.src;
   let prepared = !v.dataset.trial, preparing = false;
   // Download this short trial completely before decoding it, avoiding network
   // stalls halfway through on mobile data. The poster stays up while it loads.
