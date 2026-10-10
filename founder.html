@@ -150,7 +150,10 @@ var timer=0,k=0,live=false;
 // Read each venture for 4 seconds after its glide completes.
 function plan(i,w){clearTimeout(timer);timer=setTimeout(function(){if(i>=secs.length-1)return;var next=i+1,travel=2600;cards.forEach(function(c){c.classList.toggle('is-reading',c===secs[next])});glide(pos(next),travel);var hold=secs[next]&&secs[next].matches&&secs[next].matches('.card')?4000:8500;plan(next,travel+hold)},w)}
 ['wheel','touchmove','keydown'].forEach(function(n){addEventListener(n,function(){cancelAnimationFrame(anim);clearTimeout(timer);timer=setTimeout(function(){var b=0,d=1e9;secs.forEach(function(_,j){var x=Math.abs(pos(j)-scrollY);if(x<d){d=x;b=j}});plan(b,6000)},14000)},{passive:true})});
-plan(0,10000);
+var heroVideo=document.getElementById("holoVid"),heroBeat=false;
+function beginHeroBeat(){if(heroBeat)return;heroBeat=true;plan(0,10000)}
+if(heroVideo){heroVideo.addEventListener("playing",beginHeroBeat,{once:true});if(!heroVideo.paused&&heroVideo.currentTime>0)beginHeroBeat()}
+plan(0,90000);
 })();
 </script>
 </body>
