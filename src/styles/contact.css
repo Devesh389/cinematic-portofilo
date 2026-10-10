@@ -93,3 +93,11 @@ html { scroll-snap-type: y proximity; }
 
 .contact__team { margin: 0 0 -4px; max-width: 100%; color: #e4bfc3; font: 300 13px/1.6 Oswald, sans-serif; letter-spacing: .045em; }
 .contact__team strong { font-weight: 500; color: #fff1f2; }
+
+/* Short portrait viewports: keep all company cards and footer controls together. */
+@media (max-aspect-ratio: 1/1) and (max-width: 700px) and (max-height: 700px) {
+  .contact__in { gap: 12px; }
+  .contact__ven { gap: 8px; }
+  .cv { padding: 10px 12px; }
+  .contact__team { font-size: 12px; }
+}
