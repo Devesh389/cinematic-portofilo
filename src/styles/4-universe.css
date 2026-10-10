@@ -1,0 +1,172 @@
+/* ==========================================================================
+   Scene two — the creative universe.
+   This is the supplied film played AS the section, not a recreation of it:
+   the cards, the red light-painting, the embers and every corner label are
+   part of the footage. The page's job is to present it cinematically — arrive
+   from black, hold the frame, and breathe over the loop seam — and to stay
+   out of its way.
+   ========================================================================== */
+
+.flow {
+  position: relative;
+  z-index: 2;
+}
+
+/* The hero is position:fixed, so its scroll height has to be reserved here or
+   the universe would start at the top of the document and sit on top of it. */
+.hero-spacer {
+  height: 100svh;
+  pointer-events: none;
+}
+
+.universe {
+  position: relative;
+  height: 100svh;
+  background: #000;
+  overflow: hidden;
+  /* hard cut from the hero: two scenes, not a gradient between them */
+  box-shadow: 0 -1px 0 0 #000;
+}
+
+#uniFilm {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* the film is 16:9; any other viewport crops rather than letterboxes,
+     keeping the figure centred and the frame full-bleed */
+  object-fit: cover;
+  object-position: 50% 50%;
+  opacity: 0;
+  transform: scale(1.045);
+  transition: opacity 1.9s var(--ease-out), transform 3.2s var(--ease-out);
+}
+.universe.is-on #uniFilm {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   The chapter title, set over the film. Top-centre is the one region the
+   footage keeps dark (the ceiling above the figure), so the text lives there
+   and clears the Ps and Claude cards that hold the upper corners.
+   -------------------------------------------------------------------------- */
+
+.universe__title {
+  position: absolute;
+  top: clamp(26px, 6.5vh, 66px);
+  left: 50%;
+  transform: translate(-50%, 14px);
+  z-index: 2;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.3s var(--ease-out) 0.75s,
+              transform 1.6s var(--ease-out) 0.75s;
+}
+.universe.is-on .universe__title { opacity: 1; transform: translate(-50%, 0); }
+
+.universe__over {
+  margin: 0 0 0.9em;
+  font-family: var(--ui);
+  font-size: clamp(7.5px, 0.62vw, 9.5px);
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;        /* recentre what the tracking pushes right */
+  text-transform: uppercase;
+  color: #b98a6a;
+}
+.universe__name {
+  margin: 0;
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(20px, 2.3vw, 36px);
+  line-height: 1.22;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  text-transform: uppercase;
+  color: #f2e8dc;
+  text-shadow: 0 0 0.6em rgba(0, 0, 0, 0.9), 0 0 2em rgba(0, 0, 0, 0.7);
+}
+.universe__sub {
+  margin: 1.1em 0 0;
+  font-family: var(--ui);
+  font-size: clamp(7.5px, 0.6vw, 9.5px);
+  font-weight: 400;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: rgba(222, 200, 180, 0.55);
+}
+
+@media (max-width: 760px) {
+  .universe__name { letter-spacing: 0.18em; text-indent: 0.18em; }
+}
+
+/* breathes to black across the film's loop point so the cut is never seen,
+   and doubles as the entrance veil */
+.universe__veil {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.universe.is-fallback::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000 url('../../public/media/universe2.jpg') center / cover no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #uniFilm, .universe__title { transition-duration: 0.01ms; transition-delay: 0s; transform: none; }
+  .universe.is-on .universe__title { transform: translate(-50%, 0); }
+}
+
+/* Scene 2 film is a 9:16 portrait. Phones: full-screen cover. Wide screens:
+   show the whole portrait frame centred on black, never crop the figure/cards. */
+.universe__title { display: none; }
+@media (min-aspect-ratio: 1/1), (min-width: 701px) {
+  .universe { background: #000; }
+  #uniFilm { object-fit: contain; object-position: 50% 50%; }
+}
+
+
+/* hologram opening */
+.holo { position: relative; height: 100svh; min-height: 480px; background: #000; overflow: hidden; isolation: isolate; }
+.holo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.holo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, transparent 22%, transparent 62%, rgba(0,0,0,.78) 100%); pointer-events: none; }
+.holo__cap { position: absolute; left: 0; right: 0; bottom: clamp(48px, 9vh, 96px); z-index: 3; text-align: center; display: grid; gap: 12px; justify-items: center; pointer-events: none; }
+.holo__cap b { font: 400 clamp(38px, 8.5vw, 96px)/.95 Anton, Impact, sans-serif; letter-spacing: .02em; text-transform: uppercase; color: #19e6ff; text-shadow: 0 0 34px rgba(25,230,255,.55), 0 2px 14px rgba(0,0,0,.8); }
+.holo__cap span { font: 600 clamp(11px, 1.5vw, 20px)/1 Oswald, 'Arial Narrow', sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #dffaff; padding: .6em .9em .5em; border: 1px solid rgba(25,230,255,.6); border-radius: 4px; background: rgba(2,14,18,.6); backdrop-filter: blur(4px); text-shadow: 0 0 10px rgba(25,230,255,.7); }
+
+.holo__link { position: absolute; top: clamp(14px, 2.6vh, 28px); right: clamp(14px, 2.4vw, 34px); z-index: 4; font: 600 12px/1 Oswald, 'Arial Narrow', sans-serif; letter-spacing: .26em; text-transform: uppercase; color: #bff9ff; text-decoration: none; padding: .85em 1.1em .75em; border: 1px solid rgba(25,230,255,.55); border-radius: 999px; background: rgba(2,10,14,.6); backdrop-filter: blur(6px); }
+.holo__link:hover { box-shadow: 0 0 22px rgba(25,230,255,.45); border-color: #19e6ff; }
+
+/* the walking opening is retired */
+.hero-spacer { display: none; }
+/* wide screens: show each portrait film whole on a dark themed backdrop; a landscape
+   file (data-land, see orient.js) is switched on automatically and fills the screen */
+@media (min-aspect-ratio: 1/1), (min-width: 701px) {
+  .universe { background: radial-gradient(70% 90% at 50% 45%, #0a2a33 0%, #030d11 58%, #000 100%); }
+  #uniFilm { background: transparent; }
+  .holo { background: radial-gradient(70% 90% at 50% 45%, #0a2a33 0%, #030d11 58%, #000 100%); }
+  .holo video { object-fit: contain; object-position: 50% 50%; background: transparent; }
+  #uniFilm.is-land, .holo video.is-land { object-fit: cover; }
+}
+
+/* auto-scroll cue: a slim rail with a light that drifts down, plus a quiet caption */
+.holo__cap { bottom: clamp(88px, 15vh, 140px); }
+.holo__auto { position: absolute; left: 0; right: 0; bottom: clamp(12px, 2.6vh, 26px); z-index: 3; display: grid; justify-items: center; gap: 9px; pointer-events: none; }
+.holo__auto span { font: 500 clamp(9.5px, 1vw, 12px)/1 Oswald, 'Arial Narrow', sans-serif; letter-spacing: .34em; text-transform: uppercase; color: rgba(223,250,255,.72); text-shadow: 0 1px 10px rgba(0,0,0,.85); }
+.holo__auto i { position: relative; display: block; width: 1px; height: 38px; background: linear-gradient(180deg, rgba(25,230,255,0), rgba(25,230,255,.45)); overflow: hidden; }
+.holo__auto i::after { content: ''; position: absolute; left: -1px; top: -12px; width: 3px; height: 12px; border-radius: 3px; background: #19e6ff; box-shadow: 0 0 10px 2px rgba(25,230,255,.8); animation: holoDrift 2.4s cubic-bezier(.45,0,.25,1) infinite; }
+@keyframes holoDrift { 0% { transform: translateY(0); opacity: 0; } 18% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(54px); opacity: 0; } }
+@media (max-aspect-ratio: 1/1) and (max-width: 700px) {
+  .holo__auto { left: auto; right: 16px; justify-items: end; }
+  .holo__auto span { max-width: 150px; text-align: right; line-height: 1.5; letter-spacing: .22em; }
+}
+@media (prefers-reduced-motion: reduce) { .holo__auto i::after { animation: none; top: 14px; } }
