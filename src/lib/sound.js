@@ -1,4 +1,4 @@
-// One sound for the whole site: a single looping track, off until the visitor
+// Background music plays once per run, off until the visitor
 // turns it on (browsers block autoplay with sound). The choice is remembered
 // for the session so it carries across the portfolio and the founder page.
 const SRC = 'public/media/1-track.mp3';
@@ -73,12 +73,14 @@ const show = (on) => {
 };
 const tryOn = () => {
   if (userOff || live) return;
+  // Unmute and play the hero synchronously, while this gesture is trusted.
+  dispatchEvent(new CustomEvent('site-sound-unlock', { detail: true }));
   a.muted = false;
   a.play().then(() => { live = true; show(true); ramp(window.__voice ? 0.3 : 0.85); drop(); }).catch(() => { show(false); a.muted = true; a.volume = 0.85; a.play().catch(() => {}); });
 };
 btn.addEventListener('click', (e) => {
   e.stopImmediatePropagation();
-  if (live && !a.paused) { userOff = true; rem(true); live = false; show(false); ramp(0, () => a.pause()); }
+  if (live) { userOff = true; rem(true); live = false; show(false); ramp(0, () => a.pause()); }
   else { userOff = false; rem(false); if (done) { done = false; a.currentTime = 0; } tryOn(); }
 }, true);
 const evs = ['touchstart', 'pointerdown', 'touchend', 'pointerup', 'mouseup', 'click', 'keydown'];
@@ -98,7 +100,7 @@ addEventListener('voice', (e) => { window.__voice = e.detail; if (live && !userO
 // the song plays once through, then stops. When the whole experience restarts
 // from the top (site-restart) it starts again from the beginning, with no tap needed
 // because the browser already unlocked audio for this page.
-a.addEventListener('ended', () => { done = true; live = false; show(false); });
+a.addEventListener('ended', () => { done = true; });
 addEventListener('site-restart', () => {
   if (userOff) return;                       // he switched sound off himself: respect it
   done = false;
