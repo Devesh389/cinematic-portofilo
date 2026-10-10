@@ -3,6 +3,21 @@
 const sec = document.getElementById('holo');
 const v = document.getElementById('holoVid');
 if (sec && v) {
+  let prepared = !v.dataset.trial, preparing = false;
+  // Download this short trial completely before decoding it, avoiding network
+  // stalls halfway through on mobile data. The poster stays up while it loads.
+  const prepare = async () => {
+    if (prepared || preparing) return;
+    preparing = true;
+    try {
+      const response = await fetch(v.dataset.src);
+      if (!response.ok) throw new Error("hero download failed");
+      v.src = URL.createObjectURL(await response.blob());
+    } catch { v.src = v.dataset.src; }
+    prepared = true;
+    v.load();
+    apply();
+  };
   let vis = true, over = false, wanted = !!window.__soundOn, attempt = 0;
   v.loop = false;
   v.removeAttribute('loop');
@@ -14,6 +29,7 @@ if (sec && v) {
     const audible = wanted && vis && !over;
     v.muted = !audible;
     v.volume = 1;
+    if (!prepared) { prepare(); return; }
     if (!vis || over) { v.pause(); voice(); return; }
     // Never call play on an ended hero: browsers would start it a second time.
     v.play().then(() => { if (ticket === attempt) voice(); }).catch(() => {
