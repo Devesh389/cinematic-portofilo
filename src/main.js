@@ -1,6 +1,6 @@
 // The hologram is the opening. Retired canvas scenes have no canvas in this
 // page, so do not download their shader/texture modules during first paint.
-import { initUniverse } from './scene2/boot2.js?v=2';
+import { initUniverse } from './scene2/boot2.js?v=3';
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 const boot = document.getElementById('boot');
 if (boot) boot.classList.add('is-done');
