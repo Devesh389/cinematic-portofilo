@@ -1,7 +1,7 @@
 // Background music plays once per run, off until the visitor
 // turns it on (browsers block autoplay with sound). The choice is remembered
 // for the session so it carries across the portfolio and the founder page.
-const SRC = 'public/media/1-track.mp3';
+const SRC = matchMedia('(max-width:700px) and (max-aspect-ratio:1/1)').matches ? 'public/media/2-track-mobile.mp3' : 'public/media/1-track.mp3';
 const KEY = 'site-sound';
 const a = new Audio(SRC);
 a.loop = false;   // plays through once, then stops
