@@ -89,6 +89,10 @@ export async function initUniverse() {
   // Give the opening video first use of the connection, then prepare scene 2.
   const hero = document.getElementById('holoVid');
   const prepare = () => setTimeout(warm, 3500);
+  if (hero?.dataset.trial) {
+    hero.addEventListener("ended", warm, { once: true });
+    return { film, section };
+  }
   if (hero && hero.readyState < 3) hero.addEventListener('canplay', prepare, { once: true });
   else prepare();
 
