@@ -38,7 +38,7 @@ section.blk{padding:clamp(60px,9vw,130px) clamp(18px,6vw,96px)}
 h2{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:clamp(34px,5vw,66px);margin:10px 0 36px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
 .card{position:relative;padding:30px 26px 26px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(160deg,rgba(25,230,255,.07),rgba(255,255,255,.015));transition:.3s;display:flex;flex-direction:column;min-height:300px}
-.card:hover{border-color:var(--cy);box-shadow:0 0 44px rgba(25,230,255,.2);transform:translateY(-4px)}
+.card:hover,.card.is-reading{border-color:var(--cy);box-shadow:0 0 44px rgba(25,230,255,.2);transform:translateY(-4px)}
 .num{color:var(--cy);letter-spacing:.3em;font-size:12px}
 .card h3{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:30px;margin:12px 0 4px}
 .role{color:var(--cy2);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
@@ -140,10 +140,12 @@ var ease=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
 var anim=0;
 function glide(to,ms){cancelAnimationFrame(anim);var from=scrollY,t0=performance.now();wipe.classList.remove('go');void wipe.offsetWidth;wipe.classList.add('go');
  (function f(n){var p=Math.min(1,(n-t0)/ms);scrollTo(0,from+(to-from)*ease(p));if(p<1)anim=requestAnimationFrame(f)})(t0)}
-var secs=[0,document.getElementById('ventures'),document.querySelector('.about').parentNode,document.querySelector('footer')];
-var pos=function(k){var e=secs[k];if(!e)return 0;if(typeof e==='number')return e;return Math.min(e.getBoundingClientRect().top+scrollY-(k===3?0:20),document.documentElement.scrollHeight-innerHeight)};
+var cards=Array.from(document.querySelectorAll('#ventures .card'));
+var secs=[0,document.getElementById('ventures'),...cards,document.querySelector('.about').parentNode,document.querySelector('footer')];
+var pos=function(k){var e=secs[k];if(!e)return 0;if(typeof e==='number')return e;var inset=e.matches('.card')?90:(e.tagName==='FOOTER'?0:20);return Math.max(0,Math.min(e.getBoundingClientRect().top+scrollY-inset,document.documentElement.scrollHeight-innerHeight))};
 var timer=0,k=0,live=false;
-function plan(i,w){clearTimeout(timer);timer=setTimeout(function(){if(i>=secs.length-1)return;glide(pos(i+1),2600);plan(i+1,8500)},w)}
+// Read each venture for 8 seconds after its glide completes.
+function plan(i,w){clearTimeout(timer);timer=setTimeout(function(){if(i>=secs.length-1)return;var next=i+1,travel=2600;cards.forEach(function(c){c.classList.toggle('is-reading',c===secs[next])});glide(pos(next),travel);var hold=secs[next]&&secs[next].matches&&secs[next].matches('.card')?8000:8500;plan(next,travel+hold)},w)}
 ['wheel','touchstart','keydown','pointerdown'].forEach(function(n){addEventListener(n,function(){cancelAnimationFrame(anim);clearTimeout(timer);timer=setTimeout(function(){var b=0,d=1e9;secs.forEach(function(_,j){var x=Math.abs(pos(j)-scrollY);if(x<d){d=x;b=j}});plan(b,6000)},14000)},{passive:true})});
 plan(0,10000);
 })();
