@@ -141,9 +141,9 @@
       <li>Lightroom</li><li>Notion</li><li>Framer</li><li>Webflow</li>
       <li>Spline</li><li>Claude</li><li>ChatGPT</li><li>Midjourney</li>
     </ul>
-    <video id="uniFilm" muted playsinline loop preload="metadata"
+    <video id="uniFilm" muted playsinline loop preload="none" data-src="public/media/6-universe2.mp4"
            poster="public/media/universe2.jpg" aria-hidden="true">
-      <source src="public/media/6-universe2.mp4" type="video/mp4">
+
     </video>
     <div class="universe__veil" id="uniVeil" aria-hidden="true"></div>
   </section>
@@ -153,7 +153,7 @@
     <div class="chrono__pin">
       <h2 class="chrono__sr" id="chronoTitle">Devesh Sarkaar - a journey through time: 2021 B.Tech graduation, 2022 machine learning, 2023 real estate experience, 2024 founded Gharleads.in, 2025 founded Propvance IT Solutions, 2026 building AI-Vesh Academy</h2>
       <video class="chrono__vid" id="chronoVid" poster="public/years/5-tlv.jpg" data-src="public/years/4-tlv.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
-      <img class="chrono__frame" src="public/years/5-tl.jpg" alt="Devesh Sarkaar - a journey through time, 2021 to 2026" decoding="async">
+      <img class="chrono__frame" src="public/years/5-tl.jpg" alt="Devesh Sarkaar - a journey through time, 2021 to 2026" decoding="async" loading="lazy">
     </div>
   </section>
 
@@ -174,16 +174,16 @@
   <h2 class="sr-only">Devesh Sarkaar</h2>
 
   <div class="fin__stage1 fin__L is-on" id="finStage1">
-    <picture><source media="(max-aspect-ratio: 1/1) and (max-width: 700px)" srcset="public/fin/6-finmd.jpg"><img class="fin__frame1" src="public/fin/1-fn.jpg" alt="Devesh Sarkaar - code, ideas, build reality" decoding="async"></picture>
+    <picture><source media="(max-aspect-ratio: 1/1) and (max-width: 700px)" srcset="public/fin/6-finmd.jpg"><img class="fin__frame1" src="public/fin/1-fn.jpg" alt="Devesh Sarkaar - code, ideas, build reality" decoding="async" loading="lazy"></picture>
   </div>
 
   <figure class="fin__frame2 fin__L" id="finFrame2">
-    <picture><source media="(max-aspect-ratio: 1/1) and (max-width: 700px)" srcset="public/fin/7-finmc.jpg"><img id="finFrame2Img" src="public/fin/4-car.jpg" alt="Devesh Sarkaar leaning on a red sports car" draggable="false" decoding="async"></picture>
-    <video id="finCarVid" data-land="public/fin/12-carland.mp4" data-land-poster="public/fin/13-carlandp.jpg" muted loop playsinline autoplay preload="auto" src="public/fin/1-caranim.mp4?v=2" data-src="public/fin/1-caranim.mp4?v=2" poster="public/fin/2-caranim.jpg"></video>
+    <picture><source media="(max-aspect-ratio: 1/1) and (max-width: 700px)" srcset="public/fin/7-finmc.jpg"><img id="finFrame2Img" src="public/fin/4-car.jpg" alt="Devesh Sarkaar leaning on a red sports car" draggable="false" decoding="async" loading="lazy"></picture>
+    <video id="finCarVid" data-land="public/fin/12-carland.mp4" data-land-poster="public/fin/13-carlandp.jpg" muted loop playsinline preload="none" data-src="public/fin/1-caranim.mp4?v=2" poster="public/fin/2-caranim.jpg"></video>
   </figure>
 
   <figure class="fin__L fin__lv" id="finVidL" aria-hidden="true">
-    <video id="finVid" poster="public/fin/2-deskanim.jpg" data-src="public/fin/1-deskanim.mp4" muted loop playsinline preload="auto"></video>
+    <video id="finVid" poster="public/fin/2-deskanim.jpg" data-src="public/fin/1-deskanim.mp4" muted loop playsinline preload="none"></video>
   </figure>
 
   <figure class="fin__L fin__lv" id="finVidN" aria-hidden="true">
@@ -226,11 +226,11 @@
 </section>
 
 <script type="module" src="src/lib/orient.js?v=1"></script>
-<script type="module" src="src/main.js?v=4"></script>
+<script type="module" src="src/main.js?v=5"></script>
 <script type="module" src="src/lib/sound.js?v=11"></script>
-<script type="module" src="src/lib/fin2.js?v=96"></script>
+<script type="module" src="src/lib/fin2.js?v=97"></script>
 <script type="module" src="src/lib/holo.js?v=4"></script>
-<script type="module" src="src/lib/tlvid.js?v=4"></script>
+<script type="module" src="src/lib/tlvid.js?v=5"></script>
 <script type="module" src="src/lib/auto.js?v=5"></script>
 </body>
 </html>
