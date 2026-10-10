@@ -3,6 +3,8 @@
 const sec = document.getElementById('holo');
 const v = document.getElementById('holoVid');
 if (sec && v) {
+  const mobile = matchMedia("(max-width:700px) and (max-aspect-ratio:1/1)").matches;
+  const source = mobile && v.dataset.mobileSrc ? v.dataset.mobileSrc : v.dataset.src;
   let prepared = !v.dataset.trial, preparing = false;
   // Download this short trial completely before decoding it, avoiding network
   // stalls halfway through on mobile data. The poster stays up while it loads.
@@ -10,10 +12,10 @@ if (sec && v) {
     if (prepared || preparing) return;
     preparing = true;
     try {
-      const response = await fetch(v.dataset.src);
+      const response = await fetch(source);
       if (!response.ok) throw new Error("hero download failed");
       v.src = URL.createObjectURL(await response.blob());
-    } catch { v.src = v.dataset.src; }
+    } catch { v.src = source; }
     prepared = true;
     v.load();
     apply();
