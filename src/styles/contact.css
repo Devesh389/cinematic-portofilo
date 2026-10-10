@@ -82,3 +82,14 @@ html { scroll-snap-type: y proximity; }
   .contact__ph { order: -1; width: 104px; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 4px rgba(255,40,60,.12), 0 0 30px rgba(255,35,55,.45); }
   .contact__ph img { object-position: 50% 24%; }
 }
+
+/* compact personal contacts: one labelled icon row on every screen */
+.contact__row { flex-wrap: nowrap; gap: 8px; align-items: center; }
+.contact__row .cb { width: 64px; min-width: 44px; height: 62px; flex: 0 0 64px; padding: 9px 3px 8px; flex-direction: column; justify-content: center; gap: 6px; border-radius: 10px; font-size: 9px; letter-spacing: .06em; background: rgba(255,255,255,.025); }
+.contact__row .cb svg { width: 22px; height: 22px; flex: none; }
+.contact__row .cb:hover, .contact__row .cb:focus-visible { background: #ff2a3a; }
+.contact__row .cb--wa:hover, .contact__row .cb--wa:focus-visible { background: #25d366; }
+@media (max-width: 360px) { .contact__row { gap: 6px; } .contact__row .cb { width: 60px; flex-basis: 60px; } }
+
+.contact__team { margin: 0 0 -4px; max-width: 100%; color: #e4bfc3; font: 300 13px/1.6 Oswald, sans-serif; letter-spacing: .045em; }
+.contact__team strong { font-weight: 500; color: #fff1f2; }
