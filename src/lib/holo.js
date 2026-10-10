@@ -6,6 +6,16 @@ if (sec && v) {
   const mobile = matchMedia("(max-width:700px) and (max-aspect-ratio:1/1)").matches;
   const source = mobile && matchMedia("(pointer:coarse)").matches && v.dataset.mobileSrc ? v.dataset.mobileSrc : v.dataset.src;
   let prepared = !v.dataset.trial, preparing = false;
+  let status;
+  if (v.dataset.loading) {
+    status = document.createElement('div');
+    status.setAttribute('role', 'status');
+    status.style.cssText = 'position:absolute;z-index:20;top:2%;left:50%;transform:translateX(-50%);padding:8px 13px;border:1px solid #19e6ff66;border-radius:20px;background:#020a0edb;color:#d5faff;font:500 12px/1.4 sans-serif;letter-spacing:.04em;white-space:nowrap;pointer-events:none';
+    status.textContent = 'Loading video...';
+    sec.appendChild(status);
+    v.addEventListener('playing', () => { status.hidden = true; });
+    v.addEventListener('error', () => { status.hidden = false; status.textContent = 'Video could not load. Refresh to retry.'; });
+  }
   // Download this short trial completely before decoding it, avoiding network
   // stalls halfway through on mobile data. The poster stays up while it loads.
   const prepare = async () => {
@@ -14,7 +24,21 @@ if (sec && v) {
     try {
       const response = await fetch(source);
       if (!response.ok) throw new Error("hero download failed");
-      v.src = URL.createObjectURL(await response.blob());
+      let blob;
+      if (status && response.body) {
+        const total = Number(response.headers.get('content-length'));
+        const reader = response.body.getReader(), parts = [];
+        let loaded = 0;
+        while (true) {
+          const {done, value} = await reader.read();
+          if (done) break;
+          parts.push(value); loaded += value.length;
+          status.textContent = total ? 'Loading video ' + Math.min(100, Math.round(loaded / total * 100)) + '%' : 'Loading video ' + (loaded / 1000000).toFixed(1) + ' MB';
+        }
+        blob = new Blob(parts, {type: 'video/mp4'});
+        status.textContent = 'Starting video...';
+      } else blob = await response.blob();
+      v.src = URL.createObjectURL(blob);
     } catch { v.src = source; }
     prepared = true;
     v.load();
@@ -39,7 +63,9 @@ if (sec && v) {
       v.muted = true;
       voice();
       // Keep the picture moving; the next real gesture retries the voice.
-      if (vis && !over) v.play().catch(() => {});
+      if (vis && !over) v.play().catch(() => {
+        if (status) { status.hidden = false; status.textContent = 'Tap to start video'; }
+      });
     });
     voice();
   };
